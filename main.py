@@ -7,6 +7,12 @@ import matplotlib.pyplot as plt
 
 start_time = time.time()
 
+nodes_file = 'ASMO/model.node' # укажите ваш путь к Входным данным здесь
+delaune_output_file = 'ASMO/big_model_elements_result.txt' # Путь для сохранения выходного файла
+thiessen_output_file = 'ASMO/thiessen_output.txt'
+
+
+
 def read_nodes(file_path):
     """Чтение координат точек из файла model.node
 
@@ -44,6 +50,16 @@ def save_elements(elements, output_file):
         for i, element in enumerate(elements):
             file.write(f"{i}: {element[0]} {element[1]} {element[2]}\n")
 
+
+def save_voronoi_vertices(vor, filename):
+    with open(filename, 'w') as f:
+        for region in vor.regions:
+            if not -1 in region and len(region) > 0:
+                polygon = [vor.vertices[i] for i in region]
+                for vertex in polygon:
+                    f.write(f"{vertex[0]} {vertex[1]}\n")
+                f.write("\n")  
+
 def get_thiessen_polygon(points):
     vor = Voronoi(points)
     fig, ax = plt.subplots()
@@ -53,10 +69,10 @@ def get_thiessen_polygon(points):
 
     # ax.set_xlim(0, 1)
     # ax.set_ylim(0, 1)
+    save_voronoi_vertices(vor,thiessen_output_file)
     plt.show()
 
-nodes_file = 'ASMO/model.node' # укажите ваш путь к Входным данным здесь
-output_file = 'ASMO/big_model_elements_result.txt' # Путь для сохранения выходного файла
+
 
 
 nodes = read_nodes(nodes_file)
@@ -66,7 +82,7 @@ elements = generate_elements(nodes)
 
 get_thiessen_polygon(nodes)
 
-save_elements(elements, output_file)
+save_elements(elements, delaune_output_file)
 
 
 # plot_triangles(nodes, elements)
