@@ -1,6 +1,10 @@
 ASMO/
 triangle/
+thiessen_output.txt
+thiessen_plot.png
 
+triangulation_output.txt
+triangulation_plot.png
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
