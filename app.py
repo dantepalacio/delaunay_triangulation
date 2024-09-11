@@ -12,59 +12,48 @@ class MainWindow(QWidget):
         self.setGeometry(50, 50, 400, 300)  
         self.layout = QVBoxLayout()
 
-        # Верхний горизонтальный layout для версии
         self.top_layout = QHBoxLayout()
         self.layout.addLayout(self.top_layout)
 
-        # Метка для отображения версии
         self.version_label = QLabel("version 0.2")
         self.version_label.setAlignment(Qt.AlignRight)
-        self.version_label.setStyleSheet("font-size: 8pt;")  # Устанавливаем маленький шрифт
+        self.version_label.setStyleSheet("font-size: 8pt;")  
         self.top_layout.addWidget(self.version_label)
 
-        # Метка для отображения выбранного файла
         self.label = QLabel("Выберите файл с точками")
         self.layout.addWidget(self.label)
 
-        # Кнопка для выбора файла
         self.file_button = QPushButton("Выбрать файл")
         self.file_button.clicked.connect(self.open_file_dialog)
         self.layout.addWidget(self.file_button)
 
-        # Галочка для триангуляции Делоне
         self.delaunay_checkbox = QCheckBox("Триангуляция Делоне")
         self.delaunay_checkbox.stateChanged.connect(self.update_calculate_button_state)
         self.delaunay_checkbox.stateChanged.connect(self.update_save_plot_checkboxes_visibility)
         self.layout.addWidget(self.delaunay_checkbox)
 
-        # Галочка для полигонов Тиссена
         self.thiessen_checkbox = QCheckBox("Полигоны Тиссена")
         self.thiessen_checkbox.stateChanged.connect(self.update_calculate_button_state)
         self.thiessen_checkbox.stateChanged.connect(self.update_save_plot_checkboxes_visibility)
         self.layout.addWidget(self.thiessen_checkbox)
 
-        # Галочка для сохранения графика Триангуляции
         self.save_delaunay_plot_checkbox = QCheckBox("Сохранить график Триангуляции")
-        self.save_delaunay_plot_checkbox.setVisible(False)  # Изначально скрыта
+        self.save_delaunay_plot_checkbox.setVisible(False)  
         self.layout.addWidget(self.save_delaunay_plot_checkbox)
 
-        # Галочка для сохранения графика полигонов Тиссена
         self.save_thiessen_plot_checkbox = QCheckBox("Сохранить график полигонов Тиссена")
-        self.save_thiessen_plot_checkbox.setVisible(False)  # Изначально скрыта
+        self.save_thiessen_plot_checkbox.setVisible(False)  
         self.layout.addWidget(self.save_thiessen_plot_checkbox)
 
-        # Галочка для пропуска первой строки
         self.skip_first_line_checkbox = QCheckBox("Пропускать первую строку")
         self.layout.addWidget(self.skip_first_line_checkbox)
 
-        # Галочка для использования индексов 0 и 1
         self.use_indices_0_1_checkbox = QCheckBox("Использовать индексы 0 и 1 для координат")
         self.layout.addWidget(self.use_indices_0_1_checkbox)
 
-        # Кнопка для расчета
         self.calculate_button = QPushButton("Рассчитать")
         self.calculate_button.clicked.connect(self.calculate)
-        self.calculate_button.setEnabled(False)  # Изначально кнопка неактивна
+        self.calculate_button.setEnabled(False) 
         self.layout.addWidget(self.calculate_button)
 
         self.setLayout(self.layout)
@@ -81,7 +70,6 @@ class MainWindow(QWidget):
         self.calculate_button.setEnabled(self.delaunay_checkbox.isChecked() or self.thiessen_checkbox.isChecked())
 
     def update_save_plot_checkboxes_visibility(self):
-        # скрытие галочек графиков
         self.save_delaunay_plot_checkbox.setVisible(self.delaunay_checkbox.isChecked())
         self.save_thiessen_plot_checkbox.setVisible(self.thiessen_checkbox.isChecked())
 
