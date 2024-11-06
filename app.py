@@ -1,4 +1,6 @@
 import sys
+import os
+
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QFileDialog, QCheckBox, QLabel, QProgressBar
 from PyQt5.QtCore import Qt
 from utils import *
@@ -82,18 +84,22 @@ class MainWindow(QWidget):
         use_indices_0_1 = self.use_indices_0_1_checkbox.isChecked()
         nodes = read_nodes(nodes_file, skip_first_line, use_indices_0_1)
 
+        # Извлекаем базовое имя файла без расширения
+        base_name = os.path.splitext(nodes_file)[0]
+
         if self.delaunay_checkbox.isChecked():
             elements = delauney_triangulation(nodes)
-            save_triangulation(elements, 'triangulation_output.tri')
-            print(f"Триангуляция Делоне сохранена в triangulation_output.tri")
+            output_file = f"{base_name}.tri"
+            save_triangulation(elements, output_file)
+            print(f"Триангуляция Делоне сохранена в {output_file}")
             if self.save_delaunay_plot_checkbox.isChecked():
-                plot_triangles(nodes, elements, save_path='triangulation_plot.png')
+                plot_triangles(nodes, elements, save_path=f"{base_name}_triangulation_plot.png")
 
         if self.thiessen_checkbox.isChecked():
-            vor = get_thiessen_polygon(nodes, 'thiessen_output.poly')
-            print(f"Полигоны Тиссена сохранены в thiessen_output.poly")
+            vor = get_thiessen_polygon(nodes, f"{base_name}.poly")
+            print(f"Полигоны Тиссена сохранены в {base_name}.poly")
             if self.save_thiessen_plot_checkbox.isChecked():
-                plot_thiessen(vor, nodes, save_path='thiessen_plot.png')
+                plot_thiessen(vor, nodes, save_path=f"{base_name}_thiessen_plot.png")
 
 
 if __name__ == '__main__':
