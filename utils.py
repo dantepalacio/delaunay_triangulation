@@ -51,12 +51,18 @@ def save_triangulation(elements, output_file):
 
 def save_voronoi_vertices(vor, output_file):
     with open(output_file, 'w') as f:
-        for region in vor.regions:
+        # Используем vor.point_region, чтобы пройтись по точкам в исходном порядке
+        for point_index, region_index in enumerate(vor.point_region):
+            region = vor.regions[region_index]
+            # Проверяем, что регион валидный (нет -1, и он не пуст)
             if not -1 in region and len(region) > 0:
+                # Получаем вершины полигона
                 polygon = [vor.vertices[i] for i in region]
+                f.write(f"Точка {point_index} Центр полигона(X: {vor.points[point_index][0]}, Y: {vor.points[point_index][1]})\n")
                 for vertex in polygon:
                     f.write(f"{vertex[0]} {vertex[1]}\n")
                 f.write("\n")
+
 
 
 def get_thiessen_polygon(points, thiessen_output_file):
@@ -71,4 +77,5 @@ def plot_thiessen(vor, points, save_path=None):
     ax.set_aspect('equal')  # Устанавливаем равные масштабы по осям
     if save_path:
         plt.savefig(save_path, format='png', dpi=300)  # Сохраняем график
-    plt.show()
+    plt.show()    
+
